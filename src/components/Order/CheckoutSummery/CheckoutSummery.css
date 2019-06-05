@@ -1,0 +1,15 @@
+.CheckoutSummery{
+    text-align: center;
+    width: 80%;
+    margin: auto;
+}
+.burgerDiv{
+    width: 100%x;
+    margin: auto;
+}
+
+@media(min-width: 600px){
+    .CheckoutSummery {
+        width: 500px;
+    }
+}

@@ -29,6 +29,9 @@ class Ingredient extends Component {
             case ('salad'):
                 ingredient = <div className='Salad'></div>;
                 break;
+                case ('tomato'):
+                ingredient = <div className='Tomato '></div>;
+                break;
             default:
                 ingredient = null;
         }

@@ -8,11 +8,13 @@ import './index.css';
 import App from './App';
 import burgerReducer from './store/reducer/burger';
 import orderReducer from './store/reducer/order';
+import authReducer from './store/reducer/auth';
 import * as serviceWorker from './serviceWorker';
 
 const rootReducer = combineReducers({
     burger: burgerReducer,
-    order: orderReducer
+    order: orderReducer,
+    auth: authReducer
 });
 
 

@@ -16,7 +16,7 @@ const SideBar = (props) => {
             <div className={added}>
                 <Logo height="11%" />
                 <nav>
-                    <NavigationItems />
+                    <NavigationItems isAuth={props.isAuth} />
                 </nav>
             </div>
         </Aux>

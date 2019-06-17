@@ -11,16 +11,16 @@ import orderReducer from './store/reducer/order';
 import authReducer from './store/reducer/auth';
 import * as serviceWorker from './serviceWorker';
 
+const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
+
 const rootReducer = combineReducers({
     burger: burgerReducer,
     order: orderReducer,
     auth: authReducer
 });
 
-
-const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
-
 const store = createStore(rootReducer, composeEnhancers(applyMiddleware(thunk)))
+
 const app = (
     <Provider store={store}>
         <BrowserRouter>

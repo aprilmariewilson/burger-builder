@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import {connect} from 'react-redux';
+import { connect } from 'react-redux';
 import Button from '../../../components/UI/Button/Button';
 import Spinner from '../../../components/UI/Spinner/Spinner';
 import axios from '../../../axios-orders';
@@ -97,13 +97,14 @@ class ContactData extends Component {
     orderHandler = (e) => {
         e.preventDefault();
         const formData = {};
-        for (let formElementIdentifier in this.state.orderForm){
+        for (let formElementIdentifier in this.state.orderForm) {
             formData[formElementIdentifier] = this.state.orderForm[formElementIdentifier].value;
         }
         const order = {
             ingredients: this.props.ing,
             price: this.props.price,
-            orderData: formData
+            orderData: formData,
+            userId: this.props.userId
         }
         this.props.orderBurger(order, this.props.token);
     }
@@ -112,10 +113,10 @@ class ContactData extends Component {
         if (rules.required) {
             isValid = value.trim() !== '' && isValid;
         }
-        if(rules.minLength){
+        if (rules.minLength) {
             isValid = value.length >= rules.minLength && isValid;
         }
-        
+
         if (rules.isEmail) {
             const pattern = /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/;
             isValid = pattern.test(value) && isValid
@@ -125,17 +126,18 @@ class ContactData extends Component {
             const pattern = /^\d+$/;
             isValid = pattern.test(value) && isValid
         }
-        
-        if(rules.maxLength){
+
+        if (rules.maxLength) {
             isValid = value.length <= rules.maxLength && isValid;
         }
         return isValid;
     }
+
     inputChangedHandler = (event, inputIdentifier) => {
         const updatedOrderForm = {
             ...this.state.orderForm
         }
-        const updatedFormElement = {...updatedOrderForm[inputIdentifier]}
+        const updatedFormElement = { ...updatedOrderForm[inputIdentifier] }
         updatedFormElement.value = event.target.value;
         updatedFormElement.valid = this.checkValidity(updatedFormElement.value, updatedFormElement.validation);
         updatedFormElement.touched = true;
@@ -145,8 +147,8 @@ class ContactData extends Component {
         for (let inputIdentifier in updatedOrderForm) {
             formIsValid = updatedOrderForm[inputIdentifier].valid && formIsValid;
         }
-      
-        this.setState({orderForm: updatedOrderForm, formIsValid: formIsValid});
+
+        this.setState({ orderForm: updatedOrderForm, formIsValid: formIsValid });
     };
 
     render() {
@@ -166,13 +168,11 @@ class ContactData extends Component {
                         elementConfig={formElement.config.elementConfig}
                         value={formElement.config.value}
                         invalid={!formElement.config.valid}
-                        touched = {formElement.config.touched}
+                        touched={formElement.config.touched}
                         shouldValidate={formElement.config.validation}
-                        changed={(event) => this.inputChangedHandler(event, formElement.id)}
-
-                    />
+                        changed={(event) => this.inputChangedHandler(event, formElement.id)}/>
                 ))}
-                <Button className='Input' disabled={!this.state.formIsValid} btnType='Success'>ORDER</Button>
+                <Button disabled={!this.state.formIsValid} btnType='Success'>ORDER</Button>
             </form>
         );
         if (this.props.loading) {
@@ -187,11 +187,12 @@ class ContactData extends Component {
     }
 }
 const mapStateToProps = state => {
-    return{
+    return {
         ing: state.burger.ingredients,
         price: state.burger.totalPrice,
         loading: state.order.loading,
-        token: state.auth.token
+        token: state.auth.token,
+        userId: state.auth.userId
     }
 }
 const mapDispatchToProps = dispatch => {

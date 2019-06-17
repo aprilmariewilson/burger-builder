@@ -33,7 +33,7 @@ const orderReducer = (state = initialState, action) => {
         case actionTypes.ORDER_START:
             return {
                 ...state,
-                loading: true
+                loading: false
             };
         case actionTypes.FETCH_ORDERS_START:
             return {

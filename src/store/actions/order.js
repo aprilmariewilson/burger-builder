@@ -8,27 +8,32 @@ export const purchaseSuccess = (id, orderData) => {
         orderData
     };
 };
+
 export const purchaseInit = () => {
     return {
         type: actionTypes.PURCHASE_INIT
     };
 };
+
 export const purchaseFail = (error) => {
     return {
         type: actionTypes.PURCHASE_FAIL,
         error
     };
 };
+
 export const orderStart = () => {
     return {
         type: actionTypes.ORDER_START
     };
 };
-export const purchaseAttempt = (token, orderData) => {
+
+export const purchaseAttempt = (orderData, token) => {
     return dispatch => {
         dispatch(orderStart());
         axios.post('/orders.json?auth=' + token, orderData)
             .then(res => {
+                console.log(res.data);
                 dispatch(purchaseSuccess(res.data.name, orderData));
 
             })
@@ -56,10 +61,11 @@ export const fetchOrdersStart = () => {
         type: actionTypes.FETCH_ORDERS_START,
     }
 };
-export const getOrders = (token) => {
+export const getOrders = (token, userId) => {
     return dispatch => {
         dispatch(fetchOrdersStart());
-        axios.get('/orders.json?auth=' + token )
+        const queryParams = '?auth=' + token + '&orderBy="userId"&equalTo="' + userId + '"';
+        axios.get('/orders.json' + queryParams)
             .then(res => {
                 const fetchedOrders = [];
                 for (let key in res.data) {

@@ -16,7 +16,7 @@ class BurgerBuilder extends Component {
         purchasing: false,
     }
     componentDidMount() {
-       this.props.initIngredients();
+        this.props.initIngredients();
     }
     updatePurchaseState(ingredients) {
         const sum = Object.keys(ingredients)
@@ -28,16 +28,21 @@ class BurgerBuilder extends Component {
             }, 0);
         return sum > 0;
     }
-  
+
     purchaseHandler = () => {
-        this.setState({ purchasing: true })
+        if (this.props.isAuthenticated) {
+            this.setState({ purchasing: true });
+        } else {
+            this.props.pathRedirect('/checkout');
+            this.props.history.push('/auth');
+        }
     };
     purchaseCancelHandler = () => {
         this.setState({ purchasing: false })
     };
     purchaseContinueHandler = () => {
         this.props.initPurchase();
-      this.props.history.push('/checkout')
+        this.props.history.push('/checkout')
     };
     render() {
         const disable = {
@@ -55,6 +60,7 @@ class BurgerBuilder extends Component {
                     ingredientsAdded={this.props.ingredientAdded}
                     ingredientsRemoved={this.props.ingredientRemoved}
                     disabled={disable}
+                    isAuth={this.props.isAuthenticated}
                     price={this.props.price}
                     purchasable={this.updatePurchaseState(this.props.ing)}
                     ordered={this.purchaseHandler}
@@ -83,6 +89,7 @@ const mapStateToProps = state => {
         ing: state.burger.ingredients,
         price: state.burger.totalPrice,
         error: state.burger.error,
+        isAuthenticated: state.auth.token !== null
     };
 }
 const mapDispatchToProps = dispatch => {
@@ -90,7 +97,8 @@ const mapDispatchToProps = dispatch => {
         initIngredients: () => dispatch(actionCreators.initIngredients()),
         ingredientAdded: (ingName) => dispatch(actionCreators.addIngredient(ingName)),
         ingredientRemoved: (ingName) => dispatch(actionCreators.removeIngredient(ingName)),
-        initPurchase: () => dispatch(actionCreators.purchaseInit())
+        initPurchase: () => dispatch(actionCreators.purchaseInit()),
+        pathRedirect: (path) => dispatch(actionCreators.authRedirectPath(path))
     };
 }
 

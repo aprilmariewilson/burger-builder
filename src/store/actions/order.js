@@ -33,7 +33,6 @@ export const purchaseAttempt = (orderData, token) => {
         dispatch(orderStart());
         axios.post('/orders.json?auth=' + token, orderData)
             .then(res => {
-                console.log(res.data);
                 dispatch(purchaseSuccess(res.data.name, orderData));
 
             })
